@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# Script para mostrar los puertos en escucha con PID y nombre del programa
+
+echo "Puertos en escucha con PID y nombre del programa:"
+echo "-------------------------------------------------"
+
+# Usamos el comando 'ss' para listar los sockets en escucha
+# '-l' : Muestra solo sockets en escucha
+# '-p' : Muestra el proceso asociado al socket
+# '-t' : Muestra sockets TCP
+# '-u' : Muestra sockets UDP
+# '-n' : No resuelve nombres (muestra direcciones y puertos como números)
+
+ss -tulnp | awk '
+NR == 1 { print $0 } # Imprime la cabecera
+NR > 1 { print $0 }  # Imprime el resto de las filas
+'
