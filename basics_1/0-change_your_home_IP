@@ -1,17 +1,18 @@
 #!/usr/bin/env bash
-# Script to configure localhost to resolve to 127.0.0.2
+#configures an Ubuntu server with the below requirements.
+#Requirements:
+#localhost resolves to 127.0.0.2
+#facebook.com resolves to 8.8.8.8.
+sudo cp /etc/hosts /etc/hosts.backup
 
-# Ensure the script is run as root
-if [ "$(id -u)" -ne 0 ]; then
-  echo "This script must be run as root. Use sudo."
-  exit 1
+if grep -q "127.0.0.1 localhost" /etc/hosts; then
+    sudo sed -i '/localhost/c\127.0.0.2 localhost' /etc/hosts
+else
+    echo "127.0.0.2 localhost" | sudo tee -a /etc/hosts
 fi
 
-# Backup the /etc/hosts file
-cp /etc/hosts /etc/hosts.bak
-
-# Update localhost entry in /etc/hosts
-sed -i '/127\.0\.0\.1\s\+localhost/d' /etc/hosts
-echo "127.0.0.2 localhost" >> /etc/hosts
-
-echo "localhost now resolves to 127.0.0.2"
+if grep -q "facebook.com" /etc/hosts; then
+    sudo sed -i '/facebook.com/c\8.8.8.8 facebook.com' /etc/hosts
+else 
+    echo "8.8.8.8 facebook.com" | sudo tee -a /etc/hosts
+fi
