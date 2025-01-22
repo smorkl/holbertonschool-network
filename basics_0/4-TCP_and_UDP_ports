@@ -1,18 +1,14 @@
 #!/bin/bash
 
-# Script to display listening ports with PID and program name
+# Display active listening ports with PID and program name
+echo "Active Internet connections (only servers)"
+echo "Proto Recv-Q Send-Q Local Address           Foreign Address         State       PID/Program name"
 
-echo "Listening ports with PID and program name:"
-echo "-------------------------------------------"
+# Display TCP and UDP listening sockets
+sudo ss -tulnp | awk 'NR==1 { next } { print $0 }'
 
-# Use 'ss' command to list listening sockets
-# '-l' : Show only listening sockets
-# '-p' : Show the process using the socket
-# '-t' : Show TCP sockets
-# '-u' : Show UDP sockets
-# '-n' : Do not resolve names (shows ports and addresses as numbers)
+echo "Active UNIX domain sockets (only servers)"
+echo "Proto RefCnt Flags       Type       State         I-Node   PID/Program name    Path"
 
-ss -tulnp | awk '
-NR == 1 { print $0 } # Print the header row
-NR > 1 { print $0 }  # Print the rest of the rows
-'
+# Display UNIX domain sockets in listening state
+sudo ss -xlnp | awk 'NR==1 { next } { print $0 }'
